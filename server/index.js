@@ -60,6 +60,31 @@ app.get('/b-year', async (req, res) => {
     }
 });
 
+// Check that every opening brace has a corresponding closing one
+app.get('/search', async (req, res) => {
+    try {
+        const searchTerm = req.query.term;
+        if (!searchTerm) {
+            return res.status(400).json({ error: "Search term is required." });
+        }
+
+        const query = `
+            SELECT * 
+            FROM missing_people 
+            WHERE LOWER(name) LIKE $1 OR LOWER(surname) LIKE $2
+        `;
+        const searchValue = `%${searchTerm.toLowerCase()}%`;
+
+        const result = await pool.query(query, [searchValue, searchValue]);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error executing search query", err);
+        res.status(500).json({ error: "An internal server error occurred" });
+    }
+}); // <-- Ensure that the closing parenthesis here matches
+
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
