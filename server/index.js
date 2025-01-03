@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'store_assets',
+    database: 'prog_web',
     password: 'admin',  
     port: 5432
 });
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 // API endpoint example
 app.get('/data', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM products');
+        const result = await pool.query('SELECT * FROM missing_people');
         console.log(result.rows);
         res.json(result.rows);
     } catch (err) {
@@ -36,6 +36,18 @@ app.get('/data', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+app.get('/m_year', async (req, res) => {
+    try{
+        const result = await pool.query('SELECT m_year FROM missing_people');
+        console.log(result.rows);
+        res.json(result.rows);
+    } catch (err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+
+})
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
