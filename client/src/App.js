@@ -3,6 +3,8 @@ import { fetchData } from './services/api';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import VoivFilterMenu from './VoivFilterMenu';
 import SexFilterMenu from './SexFilterMenu';
+import MYearFilter from './MYearFilter';
+import BYearFilter from './BYearFilter';
 
 function App() {
     const [data, setData] = useState([]);
@@ -10,6 +12,8 @@ function App() {
     const [filters, setFilters] = useState({
         voiv: '',
         sex: '',
+        m_year: '',
+        b_year: ''
     });
 
     useEffect(() => {
@@ -34,7 +38,12 @@ function App() {
         if (updatedFilters.sex) {
             filtered = filtered.filter((item) => item.sex === updatedFilters.sex);
         }
-
+        if(updatedFilters.m_year) {
+            filtered = filtered.filter((item) => item.m_year === parseInt(updatedFilters.m_year, 10));
+        }
+        if(updatedFilters.b_year) {
+            filtered = filtered.filter((item) => item.b_year === parseInt(updatedFilters.b_year, 10));
+        }
         setFilteredData(filtered);
     };
 
@@ -54,11 +63,15 @@ function App() {
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
             <VoivFilterMenu onFilterChange={(selectedFilter) => handleFilterChange('voiv', selectedFilter)} />
             <SexFilterMenu onFilterChange={(selectedFilter) => handleFilterChange('sex', selectedFilter)} />
+            <MYearFilter onFilterChange={(selectedFilter) => handleFilterChange('m_year', selectedFilter)} />
+            <BYearFilter onFilterChange={(selectedFilter) => handleFilterChange('b_year', selectedFilter)}/>    
         </div>
             {/* Display selected filters */}
             <div>
                 {filters.voiv && <p><strong>Województwo:</strong> {filters.voiv}</p>}
                 {filters.sex && <p><strong>Płeć:</strong> {filters.sex}</p>}
+                {filters.m_year && <p><strong>Rok zaginięcia:</strong>{filters.m_year}</p>}
+                {filters.b_year && <p><strong>Rok urodzenia</strong>{filters.b_year}</p>}
             </div>
 
             {/* List of Missing People */}
