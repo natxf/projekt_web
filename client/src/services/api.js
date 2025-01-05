@@ -6,3 +6,5 @@ export const fetchData = () => API.get('/data');
 export const fetchMYear = () => API.get('/m-year');
 export const fetchBYear = () => API.get('/b-year');
 export const fetchPerson = () => API.get('/search');
+export const registerForm = (values) => API.post('/register', values);
+export const loginForm = (values) => API.post('/login', values);

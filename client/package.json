@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.x.x",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
-    "@babel/plugin-proposal-private-property-in-object": "^7.x.x",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -37,5 +40,4 @@
     ]
   },
   "proxy": "http://localhost:5000"
-
 }
