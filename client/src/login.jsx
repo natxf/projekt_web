@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginForm } from "./services/api";
+import axios from "axios";
 
 function Login() {
     const [values, setValues] = useState({
@@ -9,6 +10,7 @@ function Login() {
     })
 
     const navigate = useNavigate();
+    axios.defaults.withCredentials=true;
     const handleSubmit = (event) => {
         event.preventDefault();
         loginForm(values)
@@ -16,7 +18,7 @@ function Login() {
             if(res.data.Status==="Success"){
                navigate('/data');
             } else {
-                alert("Error");
+                alert(res.data.Error);
             };
         }).catch(err => {
             console.log(err);

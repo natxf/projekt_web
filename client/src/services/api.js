@@ -2,9 +2,12 @@ import axios from 'axios';
 
 const API = axios.create({ baseURL: 'http://localhost:5000' });
 
-export const fetchData = () => API.get('/data');
-export const fetchMYear = () => API.get('/m-year');
-export const fetchBYear = () => API.get('/b-year');
-export const fetchPerson = () => API.get('/search');
-export const registerForm = (values) => API.post('/register', values);
-export const loginForm = (values) => API.post('/login', values);
+axios.defaults.withCredentials = true;
+
+export const fetchData = () => API.get('/data', { withCredentials: true });
+export const fetchMYear = () => API.get('/m-year', { withCredentials: true });
+export const fetchBYear = () => API.get('/b-year', { withCredentials: true });
+export const fetchPerson = () => API.get('/search', { withCredentials: true });
+export const registerForm = (values) => API.post('/register', values, { withCredentials: true });
+export const loginForm = (values) => API.post('/login', values, { withCredentials: true });
+export const logout = () => API.get('/logout', {withCredentials: true});
