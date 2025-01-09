@@ -39,7 +39,10 @@ const verifyUser = (req, res, next) => {
             if(err) {
                 return res.json({Error: "incorrect token"});
             } else {
-                req.name = decoded.name;
+                console.log("Decoded token:", decoded); // Log decoded token
+                req.userId = decoded.userId; // Ensure userId is being assigned correctly
+                console.log("User ID from token:", req.userId);
+                console.log(req.userId);
                 next();
             }
         });
@@ -159,8 +162,9 @@ app.post('/login', (req, res) => {
                 }
 
                 if (response) {
-                    const name = result.rows[0].email;
-                    const token = jwt.sign({name}, "jwt-secret-key", {expiresIn: "1d"});
+                    //const name = result.rows[0].email;
+                    const userId = result.rows[0].id;
+                    const token = jwt.sign({userId}, "jwt-secret-key", {expiresIn: "1d"});
                     console.log('Before setting cookie:', res.getHeaders());
 
                     res.cookie('token', token, {
@@ -188,6 +192,96 @@ app.get('/logout', (req, res) => {
     return res.json({Status: "Success"});
 });
 
+app.post('/add-person', verifyUser, async (req, res) => {
+    try {
+        const {name, surname, voiv, m_year, b_year, sex, description} = req.body;
+        const userId = req.userId;
+
+        const insertQuery = `INSERT INTO missing_people (id, name, surname, voiv, m_year, b_year, sex, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`;
+
+        const personId = uuidv4();
+        const userMissingID = uuidv4();
+
+        await pool.query(insertQuery, [
+            personId,
+            name,
+            surname,
+            voiv,
+            m_year,
+            b_year,
+            sex,
+            description
+        ]);
+
+        const relationQuery = `INSERT INTO user_missing_people (id, user_id, missing_person_id) VALUES ($1, $2, $3)`;
+        await pool.query(relationQuery, [userMissingID, userId, personId]);
+
+        res.json({Status: "Success", personId, userMissingID});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({Error: "Server error while adding missing person"});
+    }
+});
+
+app.get('/personal-list',verifyUser, async (req, res) => {
+    try {
+        const userId = req.userId;
+        const query = `SELECT * FROM missing_people AS mp JOIN user_missing_people AS ump ON mp.id=ump.missing_person_id WHERE ump.user_id = $1`;
+        const result = await pool.query(query, [userId]);
+        console.log("Query Result:", result.rows); // Debugging query result
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({Error: 'Server error viewing logged list '});
+    }
+});
+
+app.post('/edit-data', verifyUser, async (req, res) => {
+    console.log("Hit /edit-data route");
+
+    try {
+        const {missing_person_id, name, surname, voiv, m_year, b_year, sex, description} = req.body;
+        console.log("Request Data:", missing_person_id, name, surname, voiv, m_year, b_year, sex, description);  // Log the data you're trying to update
+
+        const query = `UPDATE missing_people SET name =$1, surname =$2, voiv=$3, m_year=$4, b_year=$5, sex=$6, description=$7 WHERE id=$8 RETURNING *`;
+        const values = [name, surname, voiv, m_year, b_year, sex, description, missing_person_id];
+        const result = await pool.query(query, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Record not found" });
+        }
+        console.log("Updated Record:", result.rows[0]);  // Log the updated record
+
+        res.json({ Status: "Success", data: result.rows[0] });
+    } catch (err) {
+        console.error(err.message);
+        console.log({Error:'Server update data error'});
+    }
+});
+
+app.post('/delete', verifyUser, async (req, res) => {
+    try {
+        const {id, missing_person_id} = req.body;
+
+        const personQuery = `DELETE FROM missing_people WHERE id=$1`;
+        const pValues = [missing_person_id];
+
+        const userPersonQuery = `DELETE FROM user_missing_people WHERE id=$1`;
+        const upValues = [id];
+
+        await pool.query(personQuery, pValues);
+        await pool.query(userPersonQuery, upValues);
+        res.status(200).json({ status: "Success", message: "Record deleted successfully" });
+
+    } catch (err) {
+        console.error(err.message);
+        console.log({Error:'Server delete data error'});
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+

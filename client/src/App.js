@@ -4,6 +4,9 @@ import MissingList from './missingList';
 import Home from './home';
 import Register from './register';
 import Login from './login';
+import CreatePerson from './createPerson';
+import PersonalList from './personalList';
+import EditPerson from './editPerson';
 
 function App() {
     return (
@@ -13,6 +16,9 @@ function App() {
                 <Route path="/data" element={<MissingList />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/add-person" element={<CreatePerson/>} />
+                <Route path="/personal-list" element={<PersonalList />} />
+                <Route path="/edit-data" element={<EditPerson />} />
             </Routes>
         </BrowserRouter>
     );
