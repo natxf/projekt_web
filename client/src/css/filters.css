@@ -1,0 +1,35 @@
+.filter-container {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;  
+    align-items: center;
+}
+
+.filter-container h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.filter-container select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.filter-container select:focus {
+    border-color: #007bff;  
+}
+
+.filter-container select option {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.filter-container label {
+    display: none;
+}

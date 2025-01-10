@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchBYear } from '../services/api';
+import '../css/filters.css';
 
 const BYearFilter = ({ onFilterChange }) => {
     const [bYears, setYears] = useState([]);
@@ -26,7 +27,7 @@ const BYearFilter = ({ onFilterChange }) => {
     };
 
     return (
-        <div>
+        <div className='filter-container'>
             <h3>Rok urodzenia: </h3>
             <label htmlFor="yearFilter"></label>
             <select

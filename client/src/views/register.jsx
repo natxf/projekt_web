@@ -1,13 +1,31 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { registerForm } from "./services/api";
-
+import { registerForm } from "../services/api";
+import { mainPage } from "../services/api";
 function Register() {
     const [values, setValues] = useState({
         name:'',
         email:'',
         password:''
     })
+
+    const [auth, setAuth] = useState(false); 
+    const [message, setMessage] = useState('');
+    const [name, setName] = useState('');
+
+    useEffect(() => {
+        mainPage()
+            .then(res => {
+                if (res.data.Status === "Success") {
+                    setAuth(true);
+                    setName(res.data.name);
+                } else {
+                    setAuth(false);
+                    setMessage(res.data.Error);
+                }
+            })
+            .catch(err => console.error(err));
+    }, []);
 
     const navigate = useNavigate();
     const handleSubmit = (event) => {
@@ -25,6 +43,9 @@ function Register() {
     };
 
     return(
+         auth ? (
+            navigate('/')
+        ): (
         <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
             <div className="bg-white p-3 rounded w-25">
                 <h2>Zarejestruj się</h2>
@@ -50,6 +71,7 @@ function Register() {
                 </form>
             </div>
         </div>
+    )
     )
 }
 

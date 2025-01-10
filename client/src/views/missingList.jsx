@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { fetchData } from './services/api';
-import VoivFilterMenu from './filters/VoivFilterMenu';
-import SexFilterMenu from './filters/SexFilterMenu';
-import MYearFilter from './filters/MYearFilter';
-import BYearFilter from './filters/BYearFilter';
+import { fetchData } from '../services/api';
+import VoivFilterMenu from '../filters/VoivFilterMenu';
+import SexFilterMenu from '../filters/SexFilterMenu';
+import MYearFilter from '../filters/MYearFilter';
+import BYearFilter from '../filters/BYearFilter';
 import SearchPerson from './SearchPerson';
+import '../css/list.css';
+
 
 function MissingList() {
     const [data, setData] = useState([]);
@@ -60,14 +62,12 @@ function MissingList() {
     };
 
     return (
-        <div>
+        <div className='missing-list-container'>
             <h1>Baza Zaginionych</h1>
-            <div style={{ padding: '20px' }}></div>
 
             {/* Search Field and Button */}
             <SearchPerson onFilterChange={handleSearchResults} />
 
-            <h2>Filtrowanie</h2>
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
                 <VoivFilterMenu onFilterChange={(selectedFilter) => handleFilterChange('voiv', selectedFilter)} />
                 <SexFilterMenu onFilterChange={(selectedFilter) => handleFilterChange('sex', selectedFilter)} />
