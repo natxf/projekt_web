@@ -1,0 +1,53 @@
+/* SearchPerson.css */
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    position: relative;
+}
+
+.search-container input {
+    width: 300px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: #255e9b;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    width: 300px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.search-container button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.search-container button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.search-container p {
+    color: red;
+    position: absolute;
+    top: 100%;
+    font-size: 14px;
+    text-align: left;
+}

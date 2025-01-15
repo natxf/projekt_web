@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../css/filters.css';
 
 const VoivFilterMenu = ({ onFilterChange }) => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -29,8 +30,7 @@ const VoivFilterMenu = ({ onFilterChange }) => {
   };
 
   return (
-    <div>
-
+    <div className='filter-container'>
       <h3>Województwo</h3>
       <div>
         <label htmlFor="dropdown"></label>

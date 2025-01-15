@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchMYear } from '../services/api';
+import '../css/filters.css';
 
 const MYearFilter = ({ onFilterChange }) => {
     const [mYears, setYears] = useState([]);
@@ -26,7 +27,7 @@ const MYearFilter = ({ onFilterChange }) => {
     };
 
     return (
-        <div>
+        <div className='filter-container'>
             <h3>Rok zaginięcia</h3>
             <label htmlFor="yearFilter"></label>
             <select

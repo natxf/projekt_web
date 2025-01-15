@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPersonalList, deletePerson } from './services/api';
-import { Link } from 'react-router-dom';
+import { fetchPersonalList, deletePerson } from '../services/api';
+import { Link, useNavigate } from 'react-router-dom';
+import { mainPage } from '../services/api';
+import '../css/personalList.css';
+ 
 
 function PersonalList() {
     const [data, setData] = useState([]);
     const [refresh, setRefresh] = useState(false); 
+    const [auth, setAuth] = useState(false); 
+    const [message, setMessage] = useState('');
+    const [name, setName] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchPersonalList()
@@ -15,6 +22,16 @@ function PersonalList() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
+                mainPage()
+                .then(res => {
+                    if(res.data.Status==="Success"){
+                        setAuth(true);
+                        setName(res.data.name);
+                    } else {
+                        setAuth(false);
+                        setMessage(res.data.Error);
+                    }
+                })
     }, [refresh]);
 
     const handleDelete = (person) => {
@@ -39,7 +56,12 @@ function PersonalList() {
     }
 
     return (
-        <div>
+        !auth ? (
+            <div className="centered-container">
+                <Link to='/login' className='h3'>Zaloguj się aby uzyskać dostęp do swojej listy osób</Link>
+            </div>
+        ):(
+        <div className='personal-list-container'>
             {data.length <= 0 ? (
                 <h3>Brak danych</h3> 
             ) : (
@@ -52,15 +74,18 @@ function PersonalList() {
                             <p><strong>Rok urodzenia:</strong> {item.b_year}</p>
                             <p><strong>Płeć:</strong> {item.sex}</p>
                             <p><strong>Opis:</strong> {item.description}</p>
-                            <Link to="/edit-data" state={{person: item}} className='btn btn-button-ouline-primary w-30 rounded-0'>Edytuj dane
-                            </Link>
-                            <button type="button" className="btn btn-outline-danger w-30 rounded-0" onClick={() => handleDelete(item)}>Usuń osobę</button>
+                            <div className='buttons-container'>
+                                <Link to="/edit-data" state={{person: item}} className='btn btn-outline-primary w-30 rounded-0'>Edytuj dane
+                                </Link>
+                                <button type="button" className="btn btn-outline-danger w-30 rounded-0" onClick={() => handleDelete(item)}>Usuń osobę</button>
+                            </div>
                         </li>
                     ))}
                 </ul>
             )}
 
         </div>
+        )
     );
 }
 

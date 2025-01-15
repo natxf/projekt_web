@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../css/filters.css';
 
 const SexFilterMenu = ({ onFilterChange }) => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -15,7 +16,7 @@ const SexFilterMenu = ({ onFilterChange }) => {
   };
 
   return (
-    <div>
+    <div className='filter-container'>
       <h3>Płeć</h3>
       <div>
         <label htmlFor="dropdown"></label>

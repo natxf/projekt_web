@@ -4,6 +4,7 @@ const API = axios.create({ baseURL: 'http://localhost:5000' });
 
 axios.defaults.withCredentials = true;
 
+export const mainPage = () => API.get('/', {withCredentials:true});
 export const fetchData = () => API.get('/data', { withCredentials: true });
 export const fetchMYear = () => API.get('/m-year', { withCredentials: true });
 export const fetchBYear = () => API.get('/b-year', { withCredentials: true });

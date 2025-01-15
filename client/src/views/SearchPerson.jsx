@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { fetchPerson } from './services/api';
+import { fetchPerson } from '../services/api';
+import '../css/searchPerson.css'
 
 const SearchPerson = ({onFilterChange}) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -35,10 +36,10 @@ const SearchPerson = ({onFilterChange}) => {
     };
     
     return (
-        <div>
-            <input type="text" valuse={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder='wyszukaj osobę'></input>
-            <button onClick={handleSearch} disabled={isLoading}>{isLoading ? `szukanie...` : 'wyszukaj'}</button>
+        <div className='search-container'>
             {error && <p style={{color: `red`}}>{error}</p>}
+            <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder='wyszukaj osobę'></input>
+            <button onClick={handleSearch} disabled={isLoading}>{isLoading ? `szukanie...` : 'wyszukaj'}</button>
         </div>
     );
 };

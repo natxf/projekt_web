@@ -67,7 +67,7 @@ app.get('/data', async (req, res) => {
 
 app.get('/m-year', async (req, res) => {
     try{
-        const result = await pool.query('SELECT m_year FROM missing_people');
+        const result = await pool.query('SELECT m_year FROM missing_people GROUP BY m_year ORDER BY m_year ASC');
        // console.log(result.rows);
         res.json(result.rows);
     } catch (err){
@@ -79,7 +79,7 @@ app.get('/m-year', async (req, res) => {
 
 app.get('/b-year', async (req, res) => {
     try{
-        const result = await pool.query('SELECT b_year FROM missing_people');
+        const result = await pool.query('SELECT b_year FROM missing_people GROUP BY b_year ORDER BY b_year ASC');
         console.log(result);
         res.json(result.rows);
     } catch (err) {
@@ -228,7 +228,7 @@ app.get('/personal-list',verifyUser, async (req, res) => {
         const userId = req.userId;
         const query = `SELECT * FROM missing_people AS mp JOIN user_missing_people AS ump ON mp.id=ump.missing_person_id WHERE ump.user_id = $1`;
         const result = await pool.query(query, [userId]);
-        console.log("Query Result:", result.rows); // Debugging query result
+        console.log("Query Result:", result.rows); 
 
         res.json(result.rows);
     } catch (err) {
@@ -242,7 +242,7 @@ app.post('/edit-data', verifyUser, async (req, res) => {
 
     try {
         const {missing_person_id, name, surname, voiv, m_year, b_year, sex, description} = req.body;
-        console.log("Request Data:", missing_person_id, name, surname, voiv, m_year, b_year, sex, description);  // Log the data you're trying to update
+        console.log("Request Data:", missing_person_id, name, surname, voiv, m_year, b_year, sex, description); 
 
         const query = `UPDATE missing_people SET name =$1, surname =$2, voiv=$3, m_year=$4, b_year=$5, sex=$6, description=$7 WHERE id=$8 RETURNING *`;
         const values = [name, surname, voiv, m_year, b_year, sex, description, missing_person_id];
@@ -251,7 +251,7 @@ app.post('/edit-data', verifyUser, async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Record not found" });
         }
-        console.log("Updated Record:", result.rows[0]);  // Log the updated record
+        console.log("Updated Record:", result.rows[0]); 
 
         res.json({ Status: "Success", data: result.rows[0] });
     } catch (err) {
