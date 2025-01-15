@@ -5,7 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Pool } = require('pg');
-require('dotenv').config();
+require('dotenv').config({ path: './server/.env' });
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const app = express();
@@ -20,14 +20,15 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+require('dotenv').config();
 
 // PostgreSQL connection setup
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'prog_web',
-    password: 'admin',  
-    port: 5432
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASS,  
+    port: process.env.DB_PORT
 });
 
 const verifyUser = (req, res, next) => {
@@ -39,8 +40,8 @@ const verifyUser = (req, res, next) => {
             if(err) {
                 return res.json({Error: "incorrect token"});
             } else {
-                console.log("Decoded token:", decoded); // Log decoded token
-                req.userId = decoded.userId; // Ensure userId is being assigned correctly
+                console.log("Decoded token:", decoded); 
+                req.userId = decoded.userId; 
                 console.log("User ID from token:", req.userId);
                 console.log(req.userId);
                 next();
@@ -57,7 +58,6 @@ app.get('/', verifyUser, (req, res) => {
 app.get('/data', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM missing_people');
-        console.log(result.rows);
         res.json(result.rows);
     } catch (err) {
         console.error(err.message);
@@ -68,7 +68,6 @@ app.get('/data', async (req, res) => {
 app.get('/m-year', async (req, res) => {
     try{
         const result = await pool.query('SELECT m_year FROM missing_people GROUP BY m_year ORDER BY m_year ASC');
-       // console.log(result.rows);
         res.json(result.rows);
     } catch (err){
         console.error(err.message);
