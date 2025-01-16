@@ -1,6 +1,4 @@
-﻿# projekt_web
-
-Temat projektu: Baza osób zaginionych
+﻿# Baza osób zagninionych
 
 Aby uruchomić projekt na swoim urządzeniu należy:
 
